@@ -1,26 +1,20 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import EmployeesList from "./Components/EmployeesList";
+import Employee from "./Contracts/Employee"
+
+// Uma possível requisição ao servidor
+let employees: Employee[] = [
+  { name: "Erick", surname: "Cesar", age: 20, role: "Desenvolvedor React" },
+  { name: "Erick", surname: "Cesar", age: 20, role: "Desenvolvedor React" },
+  { name: "Erick", surname: "Cesar", age: 20, role: "Desenvolvedor React" },
+  { name: "Erick", surname: "Cesar", age: 20, role: "Desenvolvedor React" },
+  { name: "Erick", surname: "Cesar", age: 20, role: "Desenvolvedor React" },
+  { name: "Erick", surname: "Cesar", age: 20, role: "Desenvolvedor React" },
+];
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  return <EmployeesList employees={employees}/>;
 }
 
 export default App;
+
