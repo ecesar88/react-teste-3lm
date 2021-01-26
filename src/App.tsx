@@ -85,14 +85,41 @@ function App() {
   });
 
   const [employees, setEmployees] = useState<Employee[]>([
-    { id: 0, name: "Erick Cesar", surname: "ad", age: 20, role: "Java Dev" },
-    { id: 1, name: "Erick", surname: "rr", age: 20, role: "React QA" },
-    { id: 2, name: "bna", surname: "hh", age: 20, role: "React QA" },
-    { id: 3, name: "ffh", surname: "ee", age: 20, role: "React QA" },
-    { id: 4, name: "dds", surname: "aa", age: 20, role: "java QA" },
-    { id: 5, name: "Erick", surname: "xx", age: 20, role: "delphi QA" },
-    { id: 6, name: "Erick", surname: "jgf", age: 20, role: "graphql QA" },
-    { id: 7, name: "fdd", surname: "Cesar", age: 20, role: "React QA" },
+    {
+      id: 1,
+      name: "Erick",
+      surname: "Cesar",
+      age: 20,
+      role: "Desenvolvedor React",
+    },
+    {
+      id: 2,
+      name: "Geralt",
+      surname: "de Rivia",
+      age: 38,
+      role: "Desenvolvedor Angular",
+      imgUrl: "https://static01.nyt.com/newsgraphics/2020/11/12/fake-people/4b806cf591a8a76adfc88d19e90c8c634345bf3d/fallbacks/mobile-03.jpg",
+    },
+    {
+      id: 3,
+      name: "Geraldo",
+      surname: "Rivera",
+      age: 42,
+      role: "Desenvolvedor Rust",
+      imgUrl:
+        "https://ds393qgzrxwzn.cloudfront.net/resize/m500x500/cat1/img/images/0/LvpVeaBij9.jpg",
+    },
+    {
+      id: 4,
+      name: "Linus",
+      surname: "Torvalds",
+      age: 46,
+      role: "Desenvolvedor C/C++",
+      imgUrl: "https://avatars.githubusercontent.com/u/1024025?s=460&v=4"
+    },
+    { id: 5, name: "Kevin", surname: "Mitnick", age: 48, role: "Analista de Segurança", imgUrl: "https://conference.pecb.com/wp-content/uploads/2017/03/kevin-mitnick.png" },
+    { id: 6, name: "Alice", surname: "Gonçalves", age: 31, role: "Testes e QA", imgUrl: "https://qodebrisbane.com/wp-content/uploads/2019/07/This-is-not-a-person-2-1.jpeg" },
+    { id: 7, name: "Isaac", surname: "Clarke", age: 28, role: "Engenheiro de Software" },
   ]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -102,10 +129,14 @@ function App() {
 
   const searchEmployees = (what: string) => {
     setEmployees((prev) => {
-      let searchResult: Employee[] | Employee = prev.filter((item) =>
-        item.name.includes(what)
+
+      let searchResult: Employee[] | Employee =
+      prev.filter((item) =>
+        Object.values(item).includes(what)
       );
+
       return searchResult;
+
     });
 
     if (!what.length) {

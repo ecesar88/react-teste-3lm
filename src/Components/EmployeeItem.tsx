@@ -30,8 +30,9 @@ const useStyles = makeStyles({
 const EmployeeItem: React.FC<{
   employee: EmployeeType;
   setEmployees: React.Dispatch<SetStateAction<EmployeeType[]>>;
-}> = ({ employee, setEmployees }) => {
-
+  employeeEditMode: React.ComponentState;
+  setEmployeeEditMode: React.Dispatch<SetStateAction<Boolean>>;
+}> = ({ employee, setEmployees, employeeEditMode, setEmployeeEditMode }) => {
   const deleteEmployee = () => {
     setEmployees((prev: EmployeeType[]) =>
       prev.filter((el) => el.id !== employee.id)
@@ -49,7 +50,7 @@ const EmployeeItem: React.FC<{
       <div className={classes.employeeFlexContainer}>
         <div style={{ display: "flex", alignItems: "center" }}>
           <ListItemAvatar>
-            <Avatar alt="" src="" />
+            <Avatar alt="profile-picture" src={employee.imgUrl} />
           </ListItemAvatar>
 
           <p style={{ marginRight: "5px", fontWeight: "bold" }}>Nome:</p>
@@ -66,11 +67,19 @@ const EmployeeItem: React.FC<{
 
         <div>
           <ButtonGroup aria-label="outlined primary button group" size="small">
-            <Button color="secondary" variant="contained" onClick={() => {}}>
+            <Button
+              color="secondary"
+              variant="contained"
+              onClick={() => setEmployeeEditMode(true)}
+            >
               <EditIcon />
             </Button>
 
-            <Button color="secondary" variant="contained" onClick={deleteEmployee}>
+            <Button
+              color="secondary"
+              variant="contained"
+              onClick={deleteEmployee}
+            >
               <DeleteIcon />
             </Button>
           </ButtonGroup>

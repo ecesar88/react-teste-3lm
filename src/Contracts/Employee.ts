@@ -3,7 +3,8 @@ type Employee = {
   name: string,
   surname?: string,
   age: number,
-  role: string
+  role: string,
+  imgUrl?: string
 }
 
 export default Employee;

@@ -35,7 +35,12 @@ const EmployeesList: React.FC<{
           ) : (
             employees.map((employee: EmployeeType) => {
               return (
-                <EmployeeItem employee={employee} setEmployees={setEmployees} />
+                <EmployeeItem
+                  employee={employee}
+                  setEmployees={setEmployees}
+                  employeeEditMode={employeeEditMode}
+                  setEmployeeEditMode={setEmployeeEditMode}
+                />
               );
             })
           )}
