@@ -2,20 +2,16 @@ import {
 	AppBar,
 	Button,
 	Container,
-	InputBase,
 	makeStyles,
 	Tooltip,
 	Typography,
 } from "@material-ui/core";
-import {
-	Add as AddIcon,
-	Search as SearchIcon,
-	Clear as ClearIcon,
-} from "@material-ui/icons";
+import { Add as AddIcon, Clear as ClearIcon } from "@material-ui/icons";
 import React, { useState } from "react";
-import EmployeesList from "./Components/EmployeesList";
 import AddScreen from "./Components/AddScreen";
+import EmployeesList from "./Components/EmployeesList";
 import EmployeeType from "./Contracts/Employee";
+import { EmployeeContext } from "./EmployeeContext";
 
 const useStyles = makeStyles({
 	root: {
@@ -65,7 +61,10 @@ function App() {
 		surname: "",
 		age: 0,
 		role: "",
+		imgUrl: "",
 	});
+
+	const [currentEmployee, setCurrentEmployee] = useState(addingNewEmployee);
 
 	const [employees, setEmployees] = useState<EmployeeType[]>([
 		{
@@ -128,108 +127,74 @@ function App() {
 		},
 	]);
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const [employeesSearchBackup, setEmployeesSearchBackup] = useState<
-		EmployeeType[]
-	>([...employees]);
-
-	const searchEmployees = (what: string) => {
-		setEmployees((prev) => {
-			let searchResult: EmployeeType[] | EmployeeType = prev.filter((item) =>
-				Object.values(item).includes(what)
-			);
-
-			return searchResult;
-		});
-
-		if (!what.length) {
-			setEmployees(employeesSearchBackup);
-		}
-	};
-
 	const classes = useStyles();
 
 	return (
-		<div className={classes.root}>
-			<AppBar position="fixed" style={{ padding: "15px" }}>
-				<div className={classes.flexContainer}>
-					<Typography
-						variant="h4"
-						component="h4"
-						align="center"
-						gutterBottom={false}
-					>
-						Gerenciador de Funcionários
-					</Typography>
+		<EmployeeContext.Provider value={{ currentEmployee, setCurrentEmployee }}>
+			<div className={classes.root}>
+				<AppBar position="fixed" style={{ padding: "15px" }}>
+					<div className={classes.flexContainer}>
+						<Typography
+							variant="h4"
+							component="h4"
+							align="center"
+							gutterBottom={false}
+						>
+							Gerenciador de Funcionários
+						</Typography>
 
-					{employeeAddMode || employeeEditMode ? (
-						<Tooltip title="Sair do modo de edição">
-							<Button
-								size="small"
-								variant="contained"
-								color="secondary"
-								style={{ height: "41px" }}
-								onClick={() => {
-									setEmployeeAddMode(false);
-									setEmployeeEditMode(false);
-								}}
-							>
-								<ClearIcon />
-							</Button>
-						</Tooltip>
-					) : (
-						<>
-							<div className={classes.search}>
-								<div className={classes.searchIcon}>
-									<SearchIcon />
-								</div>
-								<InputBase
-									placeholder="Buscar..."
-									classes={{
-										root: classes.inputRoot,
-										input: classes.inputInput,
-									}}
-									inputProps={{ "aria-label": "search" }}
-									onChange={(evt: React.ChangeEvent<HTMLInputElement>) =>
-										searchEmployees(evt.target.value)
-									}
-								/>
-							</div>
-
-							<Tooltip title="Adicionar Funcionários">
+						{employeeAddMode || employeeEditMode ? (
+							<Tooltip title="Sair do modo de edição">
 								<Button
 									size="small"
 									variant="contained"
 									color="secondary"
-									onClick={() => setEmployeeAddMode(true)}
+									style={{ height: "41px" }}
+									onClick={() => {
+										setEmployeeAddMode(false);
+										setEmployeeEditMode(false);
+									}}
 								>
-									<AddIcon />
+									<ClearIcon />
 								</Button>
 							</Tooltip>
-						</>
-					)}
-				</div>
-			</AppBar>
+						) : (
+							<>
+								<Tooltip title="Adicionar Funcionários">
+									<Button
+										size="small"
+										variant="contained"
+										color="secondary"
+										onClick={() => setEmployeeAddMode(true)}
+									>
+										<AddIcon />
+									</Button>
+								</Tooltip>
+							</>
+						)}
+					</div>
+				</AppBar>
 
-			<Container>
-				{employeeAddMode ? (
-					<AddScreen
-						addingNewEmployee={addingNewEmployee}
-						setAddingNewEmployee={setAddingNewEmployee}
-						setEmployees={setEmployees}
-						setEmployeeAddMode={setEmployeeAddMode}
-					/>
-				) : (
-					<EmployeesList
-						key={Math.random() * 1000}
-						employees={employees}
-						setEmployees={setEmployees}
-						employeeEditMode={employeeEditMode}
-						setEmployeeEditMode={setEmployeeEditMode}
-					/>
-				)}
-			</Container>
-		</div>
+				<Container>
+					{employeeAddMode ? (
+						<AddScreen
+							addingNewEmployee={addingNewEmployee}
+							setAddingNewEmployee={setAddingNewEmployee}
+							setEmployees={setEmployees}
+							setEmployeeAddMode={setEmployeeAddMode}
+						/>
+					) : (
+						<EmployeesList
+							key={Math.random() * 1000}
+							employees={employees}
+							setEmployees={setEmployees}
+							employeeEditMode={employeeEditMode}
+							setEmployeeEditMode={setEmployeeEditMode}
+						/>
+					)}
+				</Container>
+			</div>
+		</EmployeeContext.Provider>
 	);
 }
 

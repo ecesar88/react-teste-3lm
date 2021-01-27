@@ -1,4 +1,4 @@
-import React, { SetStateAction } from "react";
+import React, { SetStateAction, useContext } from "react";
 import EmployeeType from "../Contracts/Employee";
 import {
 	Grid,
@@ -8,7 +8,8 @@ import {
 	Button,
 	makeStyles,
 } from "@material-ui/core";
-import { Person as PersonIcon, Add as AddIcon } from "@material-ui/icons";
+import { Person as PersonIcon, Save as SaveIcon } from "@material-ui/icons";
+import { EmployeeContext } from "../EmployeeContext";
 
 const useStyles = makeStyles({
 	gridEmployeeRegistration: {
@@ -33,6 +34,9 @@ const EditScreen: React.FC<{
 	setEmployeeEditMode: React.Dispatch<SetStateAction<boolean>>;
 	setEmployees: React.Dispatch<SetStateAction<EmployeeType[]>>;
 }> = ({ employees, employeeEditMode, setEmployeeEditMode, setEmployees }) => {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const { currentEmployee, setCurrentEmployee } = useContext(EmployeeContext);
+
 	const classes = useStyles();
 
 	return (
@@ -60,13 +64,13 @@ const EditScreen: React.FC<{
 									id="nameInput"
 									label="Nome"
 									onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-										/* setAddingNewEmployee((prev: any) => ({
+										setCurrentEmployee((prev: any) => ({
 											...prev,
 											name: evt.target.value,
-										})); */
+										}));
 									}}
 									fullWidth
-									defaultValue={employees}
+									defaultValue={currentEmployee.name}
 								/>
 							</Grid>
 
@@ -75,12 +79,13 @@ const EditScreen: React.FC<{
 									id="surnameInput"
 									label="Sobrenome"
 									onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-										/* setAddingNewEmployee((prev: any) => ({
+										setCurrentEmployee((prev: any) => ({
 											...prev,
 											surname: evt.target.value,
-										})); */
+										}));
 									}}
 									fullWidth
+									defaultValue={currentEmployee.surname}
 								/>
 							</Grid>
 
@@ -89,12 +94,13 @@ const EditScreen: React.FC<{
 									id="ageInput"
 									label="Idade"
 									onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-										/* setAddingNewEmployee((prev: any) => ({
+										setCurrentEmployee((prev: any) => ({
 											...prev,
 											age: Number(evt.target.value),
-										})); */
+										}));
 									}}
 									fullWidth
+									defaultValue={currentEmployee.age}
 								/>
 							</Grid>
 
@@ -103,12 +109,13 @@ const EditScreen: React.FC<{
 									id="roleInput"
 									label="Cargo"
 									onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-										/* setAddingNewEmployee((prev: any) => ({
+										setCurrentEmployee((prev: any) => ({
 											...prev,
 											role: evt.target.value,
-										})); */
+										}));
 									}}
 									fullWidth
+									defaultValue={currentEmployee.role}
 								/>
 							</Grid>
 						</Grid>
@@ -126,11 +133,22 @@ const EditScreen: React.FC<{
 								<Button
 									variant="contained"
 									color="secondary"
-									onClick={() => {} /* addNewEmployee */}
+									onClick={(evt: React.MouseEvent<HTMLButtonElement>) => {
+										evt.preventDefault();
+										setEmployees((prev: any) =>
+											prev.map((item: any) => {
+												return item.id === currentEmployee.id
+													? currentEmployee
+													: item;
+											})
+										);
+
+										setEmployeeEditMode(false);
+									}}
 									type="submit"
 								>
-									<AddIcon />
-									Adicionar
+									<SaveIcon />
+									Salvar
 								</Button>
 							</div>
 						</Grid>

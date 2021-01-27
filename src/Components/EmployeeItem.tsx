@@ -1,4 +1,4 @@
-import React, { SetStateAction } from "react";
+import React, { SetStateAction, useContext } from "react";
 import {
 	Avatar,
 	ListItemAvatar,
@@ -9,6 +9,7 @@ import {
 } from "@material-ui/core";
 import EmployeeType from "../Contracts/Employee";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
+import { EmployeeContext } from "../EmployeeContext";
 
 const useStyles = makeStyles({
 	employeeCard: {
@@ -30,9 +31,13 @@ const useStyles = makeStyles({
 const EmployeeItem: React.FC<{
 	employee: EmployeeType;
 	setEmployees: React.Dispatch<SetStateAction<EmployeeType[]>>;
-	employeeEditMode: React.ComponentState;
+	employeeEditMode?: React.ComponentState;
 	setEmployeeEditMode: React.Dispatch<SetStateAction<boolean>>;
-}> = ({ employee, setEmployees, employeeEditMode, setEmployeeEditMode }) => {
+}> = ({ employee, setEmployees, setEmployeeEditMode }) => {
+  
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const { currentEmployee, setCurrentEmployee } = useContext(EmployeeContext);
+
 	const deleteEmployee = () => {
 		setEmployees((prev: EmployeeType[]) =>
 			prev.filter((el) => el.id !== employee.id)
@@ -70,10 +75,10 @@ const EmployeeItem: React.FC<{
 						<Button
 							color="secondary"
 							variant="contained"
-							onClick={(evt: any) => {
-                setEmployeeEditMode(true)
-                console.log(evt)
-              }}
+							onClick={() => {
+                setCurrentEmployee(employee)
+								setEmployeeEditMode(true);
+							}}
 						>
 							<EditIcon />
 						</Button>
