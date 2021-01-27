@@ -45,7 +45,7 @@ const EmployeeItem: React.FC<{
 		<Card
 			variant="elevation"
 			className={classes.employeeCard}
-			key={employee.id}
+			id={String(employee.id)}
 		>
 			<div className={classes.employeeFlexContainer}>
 				<div style={{ display: "flex", alignItems: "center" }}>
@@ -70,7 +70,10 @@ const EmployeeItem: React.FC<{
 						<Button
 							color="secondary"
 							variant="contained"
-							onClick={() => setEmployeeEditMode(true)}
+							onClick={(evt: any) => {
+                setEmployeeEditMode(true)
+                console.log(evt)
+              }}
 						>
 							<EditIcon />
 						</Button>

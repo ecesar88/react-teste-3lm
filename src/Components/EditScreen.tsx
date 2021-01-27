@@ -28,31 +28,12 @@ const useStyles = makeStyles({
 });
 
 const EditScreen: React.FC<{
-	addingNewEmployee: EmployeeType;
-	setAddingNewEmployee: React.Dispatch<SetStateAction<EmployeeType>>;
+	employees: EmployeeType[];
+	employeeEditMode: React.ComponentState;
+	setEmployeeEditMode: React.Dispatch<SetStateAction<boolean>>;
 	setEmployees: React.Dispatch<SetStateAction<EmployeeType[]>>;
-	setEmployeeAddMode: React.Dispatch<SetStateAction<boolean>>;
-}> = ({
-	addingNewEmployee,
-	setAddingNewEmployee,
-	setEmployees,
-	setEmployeeAddMode,
-}) => {
+}> = ({ employees, employeeEditMode, setEmployeeEditMode, setEmployees }) => {
 	const classes = useStyles();
-
-	const addNewEmployee = (evt: React.MouseEvent<HTMLButtonElement>) => {
-		evt.preventDefault();
-
-		if (addingNewEmployee.age === 0 && addingNewEmployee.name.length === 0) {
-			window.alert("por favor preencha todos os campos");
-			return;
-		} else {
-			setEmployees((prev: EmployeeType[]) => [...prev, addingNewEmployee]);
-
-			setAddingNewEmployee({ id: 0, name: "", surname: "", age: 0, role: "" });
-			setEmployeeAddMode(false);
-		}
-	};
 
 	return (
 		<Grid
@@ -79,13 +60,13 @@ const EditScreen: React.FC<{
 									id="nameInput"
 									label="Nome"
 									onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-										setAddingNewEmployee((prev: any) => ({
+										/* setAddingNewEmployee((prev: any) => ({
 											...prev,
 											name: evt.target.value,
-											id: Math.random() * 100,
-										}));
+										})); */
 									}}
 									fullWidth
+									defaultValue={employees}
 								/>
 							</Grid>
 
@@ -94,10 +75,10 @@ const EditScreen: React.FC<{
 									id="surnameInput"
 									label="Sobrenome"
 									onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-										setAddingNewEmployee((prev: any) => ({
+										/* setAddingNewEmployee((prev: any) => ({
 											...prev,
 											surname: evt.target.value,
-										}));
+										})); */
 									}}
 									fullWidth
 								/>
@@ -108,10 +89,10 @@ const EditScreen: React.FC<{
 									id="ageInput"
 									label="Idade"
 									onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-										setAddingNewEmployee((prev: any) => ({
+										/* setAddingNewEmployee((prev: any) => ({
 											...prev,
 											age: Number(evt.target.value),
-										}));
+										})); */
 									}}
 									fullWidth
 								/>
@@ -122,17 +103,17 @@ const EditScreen: React.FC<{
 									id="roleInput"
 									label="Cargo"
 									onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-										setAddingNewEmployee((prev: any) => ({
+										/* setAddingNewEmployee((prev: any) => ({
 											...prev,
 											role: evt.target.value,
-										}));
+										})); */
 									}}
 									fullWidth
 								/>
 							</Grid>
 						</Grid>
 					</form>
-					<Grid container xs={12} spacing={3}>
+					<Grid container spacing={3}>
 						<Grid item xs={6}></Grid>
 						<Grid item xs={6}>
 							<div
@@ -145,7 +126,7 @@ const EditScreen: React.FC<{
 								<Button
 									variant="contained"
 									color="secondary"
-									onClick={addNewEmployee}
+									onClick={() => {} /* addNewEmployee */}
 									type="submit"
 								>
 									<AddIcon />

@@ -1,6 +1,7 @@
 import React, { SetStateAction } from "react";
 import EmployeeType from "../Contracts/Employee";
 import EmployeeItem from "./EmployeeItem";
+import EditScreen from "./EditScreen";
 import { Container, Grid, makeStyles, Typography } from "@material-ui/core";
 
 const useStyles = makeStyles({
@@ -32,10 +33,18 @@ const EmployeesList: React.FC<{
 								</Typography>
 							</div>
 						</>
+					) : employeeEditMode ? (
+						<EditScreen
+							employees={employees}
+							setEmployees={setEmployees}
+							employeeEditMode={employeeEditMode}
+							setEmployeeEditMode={setEmployeeEditMode}
+						/>
 					) : (
 						employees.map((employee: EmployeeType) => {
 							return (
 								<EmployeeItem
+									key={employee.id}
 									employee={employee}
 									setEmployees={setEmployees}
 									employeeEditMode={employeeEditMode}
