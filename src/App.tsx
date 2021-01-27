@@ -1,12 +1,9 @@
 import {
   AppBar,
   Button,
-  Card,
   Container,
-  Grid,
   InputBase,
   makeStyles,
-  TextField,
   Tooltip,
   Typography,
 } from "@material-ui/core";
@@ -14,11 +11,11 @@ import {
   Add as AddIcon,
   Search as SearchIcon,
   Clear as ClearIcon,
-  Person as PersonIcon,
 } from "@material-ui/icons";
 import React, { useState } from "react";
 import EmployeesList from "./Components/EmployeesList";
-import Employee from "./Contracts/Employee";
+import AddScreen from "./Components/AddScreen";
+import EmployeeType from "./Contracts/Employee";
 
 const useStyles = makeStyles({
   root: {
@@ -54,29 +51,15 @@ const useStyles = makeStyles({
     width: "100%",
     marginTop: "10px",
   },
-  gridEmployeeRegistration: {
-    marginTop: "81px",
-  },
-  cardRegisterEmployee: {
-    height: "250px",
-    padding: "15px",
-    boxShadow: "3px 3px 10px 1px #00000050",
-  },
-  cardRegisterEmployeePhoto: {
-    height: "250px",
-    padding: "15px",
-    boxShadow: "3px 3px 10px 1px #00000050",
-    textAlign: "center",
-  },
 });
 
 function App() {
   const [employeeAddMode, setEmployeeAddMode] = useState(false);
   const [employeeEditMode, setEmployeeEditMode] = useState<
-    React.SetStateAction<Boolean>
+    React.SetStateAction<boolean>
   >(false);
 
-  const [addingNewEmployee, setAddingNewEmployee] = useState<Employee>({
+  const [addingNewEmployee, setAddingNewEmployee] = useState<EmployeeType>({
     id: 0,
     name: "",
     surname: "",
@@ -84,7 +67,7 @@ function App() {
     role: "",
   });
 
-  const [employees, setEmployees] = useState<Employee[]>([
+  const [employees, setEmployees] = useState<EmployeeType[]>([
     {
       id: 1,
       name: "Erick",
@@ -98,7 +81,8 @@ function App() {
       surname: "de Rivia",
       age: 38,
       role: "Desenvolvedor Angular",
-      imgUrl: "https://static01.nyt.com/newsgraphics/2020/11/12/fake-people/4b806cf591a8a76adfc88d19e90c8c634345bf3d/fallbacks/mobile-03.jpg",
+      imgUrl:
+        "https://static01.nyt.com/newsgraphics/2020/11/12/fake-people/4b806cf591a8a76adfc88d19e90c8c634345bf3d/fallbacks/mobile-03.jpg",
     },
     {
       id: 3,
@@ -115,46 +99,51 @@ function App() {
       surname: "Torvalds",
       age: 46,
       role: "Desenvolvedor C/C++",
-      imgUrl: "https://avatars.githubusercontent.com/u/1024025?s=460&v=4"
+      imgUrl: "https://avatars.githubusercontent.com/u/1024025?s=460&v=4",
     },
-    { id: 5, name: "Kevin", surname: "Mitnick", age: 48, role: "Analista de Segurança", imgUrl: "https://conference.pecb.com/wp-content/uploads/2017/03/kevin-mitnick.png" },
-    { id: 6, name: "Alice", surname: "Gonçalves", age: 31, role: "Testes e QA", imgUrl: "https://qodebrisbane.com/wp-content/uploads/2019/07/This-is-not-a-person-2-1.jpeg" },
-    { id: 7, name: "Isaac", surname: "Clarke", age: 28, role: "Engenheiro de Software" },
+    {
+      id: 5,
+      name: "Kevin",
+      surname: "Mitnick",
+      age: 48,
+      role: "Analista de Segurança",
+      imgUrl:
+        "https://conference.pecb.com/wp-content/uploads/2017/03/kevin-mitnick.png",
+    },
+    {
+      id: 6,
+      name: "Alice",
+      surname: "Gonçalves",
+      age: 31,
+      role: "Testes e QA",
+      imgUrl:
+        "https://qodebrisbane.com/wp-content/uploads/2019/07/This-is-not-a-person-2-1.jpeg",
+    },
+    {
+      id: 7,
+      name: "Isaac",
+      surname: "Clarke",
+      age: 28,
+      role: "Engenheiro de Software",
+    },
   ]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [employeesSearchBackup, setEmployeesSearchBackup] = useState<
-    Employee[]
+    EmployeeType[]
   >([...employees]);
 
   const searchEmployees = (what: string) => {
     setEmployees((prev) => {
-
-      let searchResult: Employee[] | Employee =
-      prev.filter((item) =>
+      let searchResult: EmployeeType[] | EmployeeType = prev.filter((item) =>
         Object.values(item).includes(what)
       );
 
       return searchResult;
-
     });
 
     if (!what.length) {
       setEmployees(employeesSearchBackup);
-    }
-  };
-
-  const addNewEmployee = (evt: React.MouseEvent<HTMLButtonElement>) => {
-    evt.preventDefault();
-
-    if (addingNewEmployee.age === 0 && addingNewEmployee.name.length === 0) {
-      window.alert("por favor preencha todos os campos");
-      return;
-    } else {
-      setEmployees((prev) => [...prev, addingNewEmployee]);
-
-      setAddingNewEmployee({ id: 0, name: "", surname: "", age: 0, role: "" });
-      setEmployeeAddMode(false);
     }
   };
 
@@ -172,14 +161,17 @@ function App() {
           >
             Gerenciador de Funcionários
           </Typography>
-          {employeeAddMode ? (
+          {employeeAddMode || employeeEditMode ? (
             <Tooltip title="Sair do modo de edição">
               <Button
                 size="small"
                 variant="contained"
                 color="secondary"
                 style={{ height: "41px" }}
-                onClick={() => setEmployeeAddMode(false)}
+                onClick={() => {
+                  setEmployeeAddMode(false);
+                  setEmployeeEditMode(false);
+                }}
               >
                 <ClearIcon />
               </Button>
@@ -220,116 +212,12 @@ function App() {
 
       <Container>
         {employeeAddMode ? (
-          <Grid
-            container
-            xs={12}
-            spacing={3}
-            className={classes.gridEmployeeRegistration}
-          >
-            <Grid item xs={4}>
-              <Card className={classes.cardRegisterEmployeePhoto}>
-                <PersonIcon style={{ fontSize: "225px" }} />
-              </Card>
-            </Grid>
-
-            <Grid item xs={8}>
-              <Card className={classes.cardRegisterEmployee}>
-                <Typography variant="h4" component="h4" gutterBottom={true}>
-                  Cadastrar novo funcionário
-                </Typography>
-                <form>
-                  <Grid container spacing={3}>
-                    <Grid item xs={6}>
-                      <TextField
-                        id="nameInput"
-                        label="Nome"
-                        onChange={(
-                          evt: React.ChangeEvent<HTMLInputElement>
-                        ) => {
-                          setAddingNewEmployee((prev) => ({
-                            ...prev,
-                            name: evt.target.value,
-                            id: Math.random() * 100,
-                          }));
-                        }}
-                        fullWidth
-                      />
-                    </Grid>
-
-                    <Grid item xs={6}>
-                      <TextField
-                        id="surnameInput"
-                        label="Sobrenome"
-                        onChange={(
-                          evt: React.ChangeEvent<HTMLInputElement>
-                        ) => {
-                          setAddingNewEmployee((prev) => ({
-                            ...prev,
-                            surname: evt.target.value,
-                          }));
-                        }}
-                        fullWidth
-                      />
-                    </Grid>
-
-                    <Grid item xs={6}>
-                      <TextField
-                        id="ageInput"
-                        label="Idade"
-                        onChange={(
-                          evt: React.ChangeEvent<HTMLInputElement>
-                        ) => {
-                          setAddingNewEmployee((prev) => ({
-                            ...prev,
-                            age: Number(evt.target.value),
-                          }));
-                        }}
-                        fullWidth
-                      />
-                    </Grid>
-
-                    <Grid item xs={6}>
-                      <TextField
-                        id="roleInput"
-                        label="Cargo"
-                        onChange={(
-                          evt: React.ChangeEvent<HTMLInputElement>
-                        ) => {
-                          setAddingNewEmployee((prev) => ({
-                            ...prev,
-                            role: evt.target.value,
-                          }));
-                        }}
-                        fullWidth
-                      />
-                    </Grid>
-                  </Grid>
-                </form>
-                <Grid container xs={12} spacing={3}>
-                  <Grid item xs={6}></Grid>
-                  <Grid item xs={6}>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        marginTop: "20px",
-                      }}
-                    >
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        onClick={addNewEmployee}
-                        type="submit"
-                      >
-                        <AddIcon />
-                        Adicionar
-                      </Button>
-                    </div>
-                  </Grid>
-                </Grid>
-              </Card>
-            </Grid>
-          </Grid>
+          <AddScreen
+            addingNewEmployee={addingNewEmployee}
+            setAddingNewEmployee={setAddingNewEmployee}
+            setEmployees={setEmployees}
+            setEmployeeAddMode={setEmployeeAddMode}
+          />
         ) : (
           <EmployeesList
             employees={employees}
